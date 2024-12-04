@@ -23,6 +23,7 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean package
+      working-directory: java-docker-app
 
     # Step 3: Log in to Amazon ECR
     - name: Log in to Amazon ECR
