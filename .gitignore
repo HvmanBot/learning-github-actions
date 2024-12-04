@@ -1,0 +1,57 @@
+# Java-related
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven-related
+target/
+!target/*.jar # Allow the final jar file to be committed, if necessary
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+log/
+logs/
+repository/
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.iws
+out/
+
+# VS Code files
+.vscode/
+
+# Eclipse files
+*.metadata/
+*.classpath
+*.project
+*.settings/
+*.springBeans
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Docker-related
+*.env
+.env
+.dockerignore
+docker-compose.override.yml
+
+# Node and NPM files (if frontend is added later)
+node_modules/
+npm-debug.log
+
+# Temporary files
+*.swp
+*.tmp
+*.bak
+*.log
+
+# AWS-related
+# Do NOT commit credentials or AWS-related config files to avoid security risks
+.aws/
+*.pem
