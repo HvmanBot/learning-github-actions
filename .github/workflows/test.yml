@@ -5,6 +5,12 @@ on:
     branches:
       - main  # Trigger on pushes to the main branch
 
+env:
+  AWS_REGION: eu-central-1                  # AWS region
+  ECR_REGISTRY: 340825972166.dkr.ecr.eu-central-1.amazonaws.com  # ECR Registry URL
+  ECR_REPOSITORY: test-flu           # ECR repository name
+  IMAGE_TAG: latest                         # Docker image tag (can be dynamic like ${{ github.sha }})
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -31,20 +37,20 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-central-1
+        aws-region: ${{ env.AWS_REGION }}
 
     # Step 4: Authenticate Docker to Amazon ECR
     - name: Authenticate Docker to Amazon ECR
       id: login-ecr
       run: |
-        aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 340825972166.dkr.ecr.eu-central-1.amazonaws.com
+        aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
 
     # Step 5: Build and tag the Docker image
     - name: Build Docker Image
       run: |
-        IMAGE_URI="340825972166.dkr.ecr.eu-central-1.amazonaws.com/java-docker-app:latest"
-        docker build -t java-docker-app:latest .
-        docker tag java-docker-app:latest $IMAGE_URI
+        IMAGE_URI="${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}"
+        docker build -t ${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
+        docker tag ${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} $IMAGE_URI
         echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
     # Step 6: Push Docker image to Amazon ECR
